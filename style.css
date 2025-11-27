@@ -1,0 +1,77 @@
+* {
+font-family: 'Noto Sans Lao Looped' ;
+}
+
+body {
+    background-image: linear-gradient(to right, rgba(255,0,0,0), rgb(205, 105, 170));
+}
+
+.container {
+    background-color: rgb(118, 91, 109);
+    width: 500px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+
+#todoInput {
+    width: 80%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    width: 70px;
+    height: 40px;
+    background-color: #cf6a79;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #7aa2c8;
+}
+
+h2{
+    text-align: center;
+    
+}
+
+button.delete {
+    width: 40px;
+    height: 30px;
+    float: right;
+    cursor: pointer;
+}
+
+button.edit {
+    width: 40px;
+    height: 30px;
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: #c342a9;
+}
+
+
+i.icon {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+li {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    list-style-type: none;
+}
+
+.completed {
+    text-decoration: line-through; 
+    color: gray;
+}
+

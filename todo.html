@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans Lao Looped' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script>
+        let list = [];
+        //----------------GET Method----------------//
+        fetch('https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos')
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                list = data.map(function (item) {
+                    return { id: item.id, todo: item.listTodo };
+                });
+                console.log(list);
+                let ul = document.querySelector('.ul');
+                ul.innerHTML = '';
+                for (let i = 0; i < list.length; i++) {
+                    ul.innerHTML += `<li>
+                        <i class = "icon fa fa-square check-icon" onclick = "toggleCompleted(${i})"></i>
+                        <span class="${list[i].completed ? 'completed' : ''}">${list[i].todo}</span>
+                        <button class = "delete" onclick = "deleteItem(${i})"><i><i class="fa fa-trash"></i></i></button> 
+                        <button class = "edit" onclick = "editItem(${i})"><i><i class="fa fa-edit"></i></i></button>
+                        </li>`;
+                }
+            });
+
+        let result = async () => {
+            let response = await fetch('https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos')
+            // let data =  await response.json();
+            let data = await response.json();
+            console.log(data);
+        };
+        // async function result() {
+        //     let response = await fetch('https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos')
+        //     let data = await response.json();
+        //     console.log(data);
+        // };
+        result();
+
+        //----------------POST Method----------------//
+        function todo() {
+            if (document.getElementById('todoInput').value === '') {
+                alert("You must write something!");
+            }
+            else {
+                let inputValue = document.getElementById('todoInput').value;
+                let ul = document.querySelector('.ul');
+                let data = { id: '', listTodo: inputValue }
+                console.log(JSON.stringify(data));
+                fetch('https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos', {
+                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: JSON.stringify(data) // body dat
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        fetch('https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos')
+                            .then(response => response.json())
+                            .then(data => {
+                                //console.log(data);
+                                list = data.map(function (item) {
+                                    return { id: item.id, todo: item.listTodo };
+                                });
+                                console.log(list);
+                                ul.innerHTML = '';
+                                for (let i = 0; i < list.length; i++) {
+                                    ul.innerHTML += `<li>
+                                        <i class="icon fa ${list[i].completed ? 'fa-check-square' : 'fa-square'} check-icon" 
+                   onclick="toggleCompleted(${i})"></i>
+                                        <span class="${list[i].completed ? 'completed' : ''}">${list[i].todo}</span>
+                                        <button class = "delete" onclick = "deleteItem(${i})"><i class="fa fa-trash"></i></button>
+                                        <button class = "edit" onclick = "editItem(${i})"><i class="fa fa-edit"></i></button>
+                                        </li>`;
+                                }
+                            });
+                        console.log('Success:', data);
+                        todoInput.value = '';
+                    });
+                //ul.innerHTML += `<li>${inputValue}</li>`;
+                //ul.innerHTML = ul.innerHTML + `<li>${inputValue}</li>`;
+                //list.push(inputValue);
+                //     console.log(list);
+                //     ul.innerHTML = '';
+                //     for (let i = 0; i < list.length; i++) {
+                //         ul.innerHTML += `<li>${list[i]} <button class = "delete" onclick = "deleteItem(${i})">ລຶບ</button> </li>`;
+                //     }
+                //     document.getElementById('todoInput').value = '';
+            }
+        }
+
+
+        //----------------DELETE Method----------------//
+        function deleteItem(index) {
+            fetch(`https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos/${list[index].id}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(`${data.listTodo} deleted successfully`);
+                    console.log('Deleted:', data);
+                });
+            list.splice(index, 1);
+            renderList();
+        }
+
+
+
+
+        //----------------EDIT Method----------------//
+        function editItem(index) {
+            let currentTodo = list[index].todo;
+
+            // 1) ให้ผู้ใช้กรอกค่าก่อน
+            let updatedTodo = prompt("ແກ້ໄຂລາຍການ:", currentTodo);
+
+            // ถ้ากด Cancel หรือเว้นว่าง → ไม่แก้ไข
+            if (updatedTodo === null || updatedTodo.trim() === "") return;
+
+            // เตรียมข้อมูลส่งไป API
+            let updatedData = {
+                listTodo: updatedTodo
+            };
+
+            // 2) ค่อยยิง PUT เพื่ออัปเดตใน API
+            fetch(`https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos/${list[index].id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    list[index].todo = data.listTodo;
+                    renderList();
+                    console.log('Success:', list);
+                });
+        }
+
+        function renderList() {
+            let ul = document.querySelector('.ul');
+            ul.innerHTML = '';
+
+            for (let i = 0; i < list.length; i++) {
+                ul.innerHTML += `
+            <li>
+                <i class="icon fa ${list[i].completed ? 'fa-check-square' : 'fa-square'} check-icon" 
+                   onclick="toggleCompleted(${i})"></i>
+                <span class="${list[i].completed ? 'completed' : ''}">${list[i].todo}</span>
+                <button class="delete" onclick="deleteItem(${i})"><i class="fa fa-trash"></i></button>
+                <button class="edit" onclick="editItem(${i})"><i class="fa fa-edit"></i></button>
+            </li>
+        `;
+            }
+        }
+
+        function toggleCompleted(index) {
+            list[index].completed = !list[index].completed;
+            renderList();
+            
+            fetch(`https://6921ceb7512fb4140be169a9.mockapi.io/api/v1/Todos/${list[index].id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ listTodo: list[index].todo, completed: list[index].completed })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                });
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="head">
+            <h2>My To-Do List</h2>
+            <input type="text" id="todoInput" placeholder="ເພິ່ມລາຍການ...">
+            <button id="addButton" onclick="todo()">ຕ້ອງເຮັດ</button>
+        </div>
+        <div class="todo-list" id="todoList">
+            <ul class="ul">
+
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
