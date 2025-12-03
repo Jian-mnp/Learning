@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
+    <style>
+        .container {
+            background-color: rgb(65, 70, 74);
+            font-family: 'Noto Sans Lao', sans-serif;
+            width: 500px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+        .register {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"]{
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            height: 50px;
+            background-color: #61aa91;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+           
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="register">
+            Register Form
+        </div>
+        <div class="info">
+            <div>First Name</div>
+            <input type="text" id="firstName">
+            <div>Last Name</div>
+            <input type="text" id="lastName">
+            <div>Age</div>
+            <input type="number" id="age">
+        </div>
+
+
+        <div class="gender">
+            Gender
+            <div>
+                <input type="radio" id="male" name="gender"> Male
+                <input type="radio" id="female" name="gender"> Female
+                <input type="radio" id="other" name="gender"> Other
+            </div>
+        </div>
+        <div class="interest">
+            interests
+            <div>
+                <input type="checkbox" id="sports"> Sports
+                <input type="checkbox" id="music"> Music
+                <input type="checkbox" id="travel"> Travel
+            </div>
+        </div>
+        <div class="description">
+            Description
+            <div>
+                <textarea id="description" rows="4" cols="50"></textarea>
+            </div>
+        </div>
+        <div class="submit">
+            <button onclick="submitForm()">Submit</button>
+</body>
+
+</html>
